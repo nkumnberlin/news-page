@@ -6,7 +6,8 @@
   "dependencies": {
     "@babel/runtime": "^7.7.2",
     "babel-polyfill": "^6.26.0",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.10",
+    "workbox-sw": "^4.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",

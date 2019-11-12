@@ -1,0 +1,10 @@
+{
+  "articles": [
+    {
+      "title" : " These aren't the news you're looking for",
+      "url": "",
+      "urlToImage": "images/lost_droid.png",
+      "description": "Please turn on WiFi or reload the page"
+    }
+  ]
+}
