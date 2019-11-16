@@ -1,16 +1,13 @@
-const BACKENDURL = 'https://newsapi.org/v2/';
-const API = '&apiKey=';
+const BACKENDURL = 'https://tv7vnviejg.execute-api.us-east-1.amazonaws.com/api/';
 
 export async function awsQueryLanguage(queryPackage) {
-    const SOURCES = 'sources?language='
-    const url = `${BACKENDURL}${SOURCES}${queryPackage.language}${API}${queryPackage.apiKey}`
+    const url =   BACKENDURL + `sources?language=${queryPackage.language}&category=${queryPackage.category}`
     const response = await fetch(url);
     return await response.json();
 }
 
-export async function awsQuerySpecificHeadlines(queryPackage) {
-    const HEADLINES = 'top-headlines?sources='
-    const url = `${BACKENDURL}${HEADLINES}${queryPackage.id}${API}${queryPackage.apiKey}`
+export async function awsQuerySpecificHeadlines(id) {
+    const url = BACKENDURL + `news?sources=${id}`
     const response  = await  fetch(url);
     return await response.json();
 }

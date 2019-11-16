@@ -1,9 +1,9 @@
 
 export function createArticles(article) {
-    return `
-    <div class="card col-sm-4 shadow-sm">
+        return `
+    <div class="card col-md-3 newsCard">
         <a href="${article.url}">
-            <h2>${article.title}</h2>
+            <h2 class="cardTitle">${article.title}</h2>
         <hr/>
                 <img class="card-img-top imageTop" src="${article.urlToImage}">
                 </hr>
@@ -12,20 +12,37 @@ export function createArticles(article) {
     </div>`
 }
 
-export function customerChoices() {
+export function selectChoices(options) {
     return `
-    <div class="overlay-text"> 
-        <div class="container">
-        <p class="text-center"> In welcher Sprache möchtest du deine News? </p>
-            <div class="row btn-choice-language">
-                <button type="button" class="btn btn-secondary col-sm-6" id="en"> Englisch</button>
-                <button type="button" class="btn btn-secondary col-sm-6" id="de"> Deutsch</button>
-            </div>
-        </div>
-    </div>
+         <option value="${options.id}" id="${options.id}">${options.name}</option>
     `
 };
 
+export function createOverlayContent(content){
+  return `
+    <div class="overlay-text">
+                <div class="container">
+                    <div class="row">
+                    <p class="text-center" > ${content} </p>
+                    <div class="col-sm-8">
+                        <div class="select">
+                            <select class="select-text" required id="overlay-options">
+                            </select>
+                            <span class="select-highlight"></span>
+                            <span class="select-bar"></span>
+                        </div>
+                    </div>
+                        <div class="col-sm-4">
+                           <button type="button" id="button-accept" class="btn btn-secondary">Accept</button>
+                        </div>
+                    </div>
+                </div>
+            </div>`
+};
+
 export function createSourceButtons(src){
-    return `<button type="button" class="list-group-item list-group-item-action" id="${src.id}"> ${src.name}</button>`
+    return `<li type="button" class="list-group-item" id="${src.id}"> ${src.name}</li>`
+return `
+    
+        `
 }

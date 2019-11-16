@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e2ac05a5-6def-44fe-a348-09d98f4d4a75" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/api/AwsBackendAPI.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/renderHTML/RenderHTMLContent.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/AwsBackendAPI.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/AwsBackendAPI.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderHTML/RenderHTMLContent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderHTML/RenderHTMLContent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles.css" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -79,7 +81,8 @@
       <workItem from="1573215077910" duration="2520000" />
       <workItem from="1573404827554" duration="738000" />
       <workItem from="1573584247704" duration="18211000" />
-      <workItem from="1573802011900" duration="5834000" />
+      <workItem from="1573802011900" duration="12891000" />
+      <workItem from="1573911011328" duration="10558000" />
     </task>
     <servers />
   </component>
