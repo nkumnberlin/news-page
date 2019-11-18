@@ -1,8 +1,7 @@
 import {awsQueryLanguage, awsQuerySpecificHeadlines} from '../src/api/AwsBackendAPI.jsx';
 import _ from 'lodash'
-import {createArticles, selectChoices, createSourceButtons, createOverlayContent} from '../src/renderHTML/RenderHTMLContent.js';
+import {createArticles, changeResortButton, renderMain, noContentAvailable, selectChoices, createSourceButtons, createOverlayContent} from '../src/renderHTML/RenderHTMLContent.js';
 
-const apiKey = "8566b11f65a14d54b8be47b1c01db39e";
 const main = document.querySelector('main');
 const defaultSource = "der-tagesspiegel";
 const sourceSelector = document.querySelector('#sourceSelector');
@@ -14,7 +13,6 @@ const overlayContent = {languageOverlay:"In welcher Sprache möchtest du deine N
 
 let initialSourcesLanguageJSON = "";
 let initalHeadlinesJSON = "";
-let urlNews = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`;
 let currentLanguageChoice = "", currentCategoryChoice = "", activeSource = "";
 
 window.addEventListener('load', ev => {
@@ -31,7 +29,12 @@ window.addEventListener('load', ev => {
 
 function init() {
     overlayLanguage();
+    createEventListener();
 };
+
+function createEventListener() {
+
+}
 
 function overlayLanguage() {
     let overlay = document.getElementById('overlay');
@@ -47,6 +50,8 @@ function overlayLanguage() {
 
 
 function overlayCategory(overlay) {
+    document.getElementById('newsOf').innerHTML = "";
+    document.querySelector('main').innerHTML = "";
     overlay.innerHTML = createOverlayContent(overlayContent.categoryOverlay);
     let overlayOptions = document.getElementById('overlay-options');
     overlayOptions.innerHTML = categories.cat.map( categories => selectChoices(categories)).join('\n')
@@ -62,11 +67,13 @@ async function updateNotifier() {
     let updatedHeadlinesJSON = await awsQuerySpecificHeadlines(activeSource, initalHeadlinesJSON);
     document.getElementById('reloadPage').addEventListener('click', ev => {
         ev.preventDefault();
-        renderMain(updatedHeadlinesJSON)
+        renderMain(updatedHeadlinesJSON, initalHeadlinesJSON)
+        initalHeadlinesJSON = updatedHeadlinesJSON;
+        console.log('News wurden aktualisiert');
+        snackbar.classList.remove('show')
     })
     if (_.isEqual(initalHeadlinesJSON, updatedHeadlinesJSON)) {
         console.log("snackbar hide");
-        snackbar.clickName = 'hide';
     } else {
         console.log("snackbar show!")
         snackbar.className = 'show';
@@ -81,7 +88,10 @@ async function updateSources() {
     initialSourcesLanguageJSON = await awsQueryLanguage(queryPackage);
     sourceSelector.innerHTML = initialSourcesLanguageJSON.sources.map(
         src => createSourceButtons(src)).join('\n')
-    sourceSelector.innerHTML += `<br\><br\><br\><li type="button" class="list-group-item" id="resortChange"> Resort wechslen</li>`
+    if (initialSourcesLanguageJSON.sources.length === 0){
+        main.innerHTML = noContentAvailable();
+    }
+    sourceSelector.innerHTML += changeResortButton();
     sourceSelector.addEventListener('click', evt => {
             if (evt.target.id !== 'resortChange') {
                 activeSource = evt.target.id;
@@ -110,14 +120,9 @@ async function showSpecificHeadlines(source = defaultSource) {
         id = source.target.id
     }
     initalHeadlinesJSON = await awsQuerySpecificHeadlines(activeSource);
-    renderMain(initalHeadlinesJSON)
+    renderMain(initalHeadlinesJSON, initalHeadlinesJSON)
     //interval
     console.log("timeout")
 
    let interval =  setInterval(updateNotifier, 300000, initalHeadlinesJSON);
-}
-
-function renderMain(json) {
-    document.getElementById('newsOf').innerText = "Nachrichten von " + '"'+ initalHeadlinesJSON.articles[0].source.name + '"'
-    main.innerHTML = json.articles.map(article => createArticles(article)).join('\n');
 }

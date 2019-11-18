@@ -42,7 +42,21 @@ export function createOverlayContent(content){
 
 export function createSourceButtons(src){
     return `<li type="button" class="list-group-item" id="${src.id}"> ${src.name}</li>`
-return `
-    
-        `
+}
+
+export function changeResortButton() {
+    return `<br\><br\><br\><li type="button" class="list-group-item" id="resortChange"> Resort wechslen</li>`
+}
+
+export function noContentAvailable() {
+    document.getElementById('newsOf').innerHTML = ""
+    return `<div class="alert alert-primary" role="alert">
+        Aktuell sind keine Quellen für dieses Resort vorhanden. Bitte wähle ein anderes.
+    </div>`
+}
+
+export function renderMain(json, initalHeadlines) {
+    const main = document.querySelector('main');
+    document.getElementById('newsOf').innerText = "Nachrichten von " + '"'+ initalHeadlines.articles[0].source.name + '"'
+    main.innerHTML = json.articles.map(article => createArticles(article)).join('\n');
 }
