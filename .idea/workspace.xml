@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e2ac05a5-6def-44fe-a348-09d98f4d4a75" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/images/gettyimages-139734110-2048x2048.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/renderHTML/RenderHTMLContent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/renderHTML/RenderHTMLContent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles.css" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -41,6 +43,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JavaScript" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/images" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -50,6 +53,9 @@
     <property name="settings.editor.selected.configurable" value="settings.javascript.linters.eslint" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\s0560\Documents\news-page\images" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\s0560\WebstormProjects\NewsPage\src" />
     </key>
@@ -81,7 +87,7 @@
       <workItem from="1573584247704" duration="18211000" />
       <workItem from="1573802011900" duration="12891000" />
       <workItem from="1573911011328" duration="11069000" />
-      <workItem from="1574075677905" duration="4741000" />
+      <workItem from="1574075677905" duration="13213000" />
     </task>
     <servers />
   </component>

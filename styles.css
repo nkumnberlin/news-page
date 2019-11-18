@@ -2,6 +2,9 @@
     width: 200px;
     height: 200px;
 }
+.jumbotron{
+    background-image: url("images/gettyimages-139734110-2048x2048.jpg");
+}
 
 #overlay {
     position: fixed;
@@ -46,20 +49,44 @@ a:hover{
     -moz-box-shadow: 10px 10px 19px 0px rgba(0,0,0,0.22);
     box-shadow: 10px 10px 19px 0px rgba(0,0,0,0.22);
 }
+@media (min-width: 768px)
+    .col-md-7 {
+        -ms-flex: 0 0 58.333333%;
+        flex: 0 0 58.333333%;
+        max-width: 58.333333%;
+    }
 
+.featurette-divider {
+    margin: 5rem 0;
+}
+
+.featurette-heading {
+    margin-top: 7rem;
+}
+
+.lead {
+    font-size: 1.25rem;
+    font-weight: 300;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+
+
+*, ::after, ::before {
+    box-sizing: border-box;
+}
 
 #newsOf{
     padding-top: 15px;
     padding-bottom: 30px;
 }
-#sourceSelector {
-    padding-top: 30px!important;
-}
 
 
-.header {
-    color:black;
-}
+
 
 .btn-choice{
     padding-right: 50px;

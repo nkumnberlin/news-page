@@ -1,10 +1,10 @@
 import {awsQueryLanguage, awsQuerySpecificHeadlines} from '../src/api/AwsBackendAPI.jsx';
 import _ from 'lodash'
-import {createArticles, changeResortButton, renderMain, noContentAvailable, selectChoices, createSourceButtons, createOverlayContent} from '../src/renderHTML/RenderHTMLContent.js';
+import {changeResortButton, renderMain, noContentAvailable, selectChoices, createSourceButtons, createOverlayContent} from '../src/renderHTML/RenderHTMLContent.js';
 
 const main = document.querySelector('main');
 const defaultSource = "der-tagesspiegel";
-const sourceSelector = document.querySelector('#sourceSelector');
+const sourceSelector = document.querySelector('.dropdown-menu');
 const languages = {lang: [{id: "de", name: "Deutsch"}, {id: "en", name: "Englisch"}]};
 const categories = {cat: [{id: "business", name: "Wirtschaft" }, {id: "entertainment", name: "Unterhaltung"}, {id:"general", name: "Allgemein"},
         {id: "health", name: "Gesundheit"}, {id: "science", name: "Wissenschaft"}, {id: "sports", name: "Sport"},
@@ -69,6 +69,7 @@ async function updateNotifier() {
         ev.preventDefault();
         renderMain(updatedHeadlinesJSON, initalHeadlinesJSON)
         initalHeadlinesJSON = updatedHeadlinesJSON;
+        reAdjustNews();
         console.log('News wurden aktualisiert');
         snackbar.classList.remove('show')
     })
@@ -121,8 +122,19 @@ async function showSpecificHeadlines(source = defaultSource) {
     }
     initalHeadlinesJSON = await awsQuerySpecificHeadlines(activeSource);
     renderMain(initalHeadlinesJSON, initalHeadlinesJSON)
-    //interval
+    reAdjustNews();
     console.log("timeout")
 
    let interval =  setInterval(updateNotifier, 300000, initalHeadlinesJSON);
+}
+
+function reAdjustNews(){
+    let textClass = document.querySelectorAll('.col-md-7');
+    let imageClass = document.querySelectorAll('.col-md-5');
+    for(let  i in textClass ){
+        if(i % 2 == 0 ){
+            textClass[i].className += " order-md-2";
+            imageClass[i].className += " order-md-1";
+        }
+    }
 }

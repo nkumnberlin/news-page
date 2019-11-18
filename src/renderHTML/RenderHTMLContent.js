@@ -1,16 +1,29 @@
-
-export function createArticles(article) {
+export function createArticlesLeft(article) {
         return `
-    <div class="card col-md-3 newsCard">
-        <a href="${article.url}">
-            <h2 class="cardTitle">${article.title}</h2>
-        <hr/>
-                <img class="card-img-top imageTop" src="${article.urlToImage}">
-                </hr>
-                <p> ${article.description}</p>
-        </a>
-    </div>`
+        <hr class="featurette-divider">
+        <div class="row featurette">
+            <div class="col-md-7">
+                <h2 class="featurette-heading">${article.title}</h2>
+                <p class="lead">${article.description}<p>
+            </div>
+            <div class="col-md-5">
+                <img class="featurette-image img-fluid mx-auto"  src="${article.urlToImage}">
+            </div>
+        </div>`
 }
+
+export function createArticlesRight(article, i) {
+    return `<hr class="featurette-divider">
+                <div class="row featurette">
+                 <div class="col-md-7 order-md-2">
+                   <h2 class="featurette-heading">${article.title}</h2>
+                <p class="lead">${article.description}<p>
+                </div>
+            <div class="col-md-5 order-md-1">
+                            <img class="featurette-image img-fluid mx-auto"  src="${article.urlToImage}">
+            </div>
+            </div>
+`}
 
 export function selectChoices(options) {
     return `
@@ -19,8 +32,7 @@ export function selectChoices(options) {
 };
 
 export function createOverlayContent(content){
-  return `
-    <div class="overlay-text">
+  return `    <div class="overlay-text">
                 <div class="container">
                     <div class="row">
                     <p class="text-center" > ${content} </p>
@@ -41,11 +53,11 @@ export function createOverlayContent(content){
 };
 
 export function createSourceButtons(src){
-    return `<li type="button" class="list-group-item" id="${src.id}"> ${src.name}</li>`
+    return `<a class="dropdown-item" href='#' id="${src.id}"> ${src.name}</a>`
 }
 
 export function changeResortButton() {
-    return `<br\><br\><br\><li type="button" class="list-group-item" id="resortChange"> Resort wechslen</li>`
+    return `<br\><br\><br\><a class="dropdown-item" id="resortChange"> Resort wechslen</a>`
 }
 
 export function noContentAvailable() {
@@ -57,6 +69,7 @@ export function noContentAvailable() {
 
 export function renderMain(json, initalHeadlines) {
     const main = document.querySelector('main');
-    document.getElementById('newsOf').innerText = "Nachrichten von " + '"'+ initalHeadlines.articles[0].source.name + '"'
-    main.innerHTML = json.articles.map(article => createArticles(article)).join('\n');
+    document.getElementById('newsOf').innerText = "Nachrichten von " + '"' + initalHeadlines.articles[0].source.name + '"'
+    let articles = json.articles.map(article => createArticlesLeft(article)).join('\n');
+    main.innerHTML = articles;
 }
