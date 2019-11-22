@@ -4,27 +4,19 @@ export function createArticlesLeft(article) {
         <div class="row featurette">
             <div class="col-md-7">
                 <h2 class="featurette-heading">${article.title}</h2>
-                <p class="lead">${article.description}<p>
+               <p class="lead"> 
+                <a href="${article.url}" target="_blank">
+                ${article.description}
+                <p>
+                </a>
             </div>
             <div class="col-md-5">
+            <a href="${article.url}" target="_blank">
                 <img class="featurette-image img-fluid mx-auto" href="${article.url}" src="${article.urlToImage}">
             </div>
+            </a>
         </div>`
 }
-
-export function createArticlesRight(article, i) {
-    return `<hr class="featurette-divider">
-                <div class="row featurette">
-                 <div class="col-md-7 order-md-2">
-                         <a href="${article.url}">
-                   <h2 class="featurette-heading">${article.title}</h2>
-                <p class="lead">${article.description}<p>
-                </div>
-            <div class="col-md-5 order-md-1">
-                            <img class="featurette-image img-fluid mx-auto"  src="${article.urlToImage}">
-            </div>
-            </div>
-`}
 
 export function selectChoices(options) {
     return `
@@ -52,6 +44,18 @@ export function createOverlayContent(content){
                 </div>
             </div>`
 };
+export function reloadPageSnackbar() {
+    return `<p> Neuer Inhalt vorhanden </p>
+                <br/>
+            <button class="btn btn-primary" type="button" id="reloadPage">Reload Page</button>`
+}
+
+export function reloadPageOnError(reason) {
+    debugger
+    return `<p> An error occured: ${reason}</p>
+                <br/>
+            <button class="btn btn-primary" type="button" id="reloadPage">Reload Page</button>`
+}
 
 export function createSourceButtons(src){
     return `<a class="dropdown-item" href='#' id="${src.id}"> ${src.name}</a>`
@@ -73,4 +77,22 @@ export function renderMain(json, initalHeadlines) {
     document.getElementById('newsOf').innerText = "Nachrichten von " + '"' + initalHeadlines.articles[0].source.name + '"'
     let articles = json.articles.map(article => createArticlesLeft(article)).join('\n');
     main.innerHTML = articles;
+}
+
+export function showSpinner() {
+    return `
+<div class="overlay-text">
+    <div class="container">
+        <div class="row">
+          <div class="spinner-grow text-muted"></div>
+              <div class="spinner-grow text-primary"></div>
+              <div class="spinner-grow text-success"></div>
+              <div class="spinner-grow text-info"></div>
+              <div class="spinner-grow text-warning"></div>
+              <div class="spinner-grow text-danger"></div>
+              <div class="spinner-grow text-secondary"></div>
+          </div>
+    </div>
+</div>
+   `
 }

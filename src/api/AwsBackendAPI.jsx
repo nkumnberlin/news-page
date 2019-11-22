@@ -1,8 +1,6 @@
 const BACKENDURL = 'https://tv7vnviejg.execute-api.us-east-1.amazonaws.com/api/';
 const proxyURL = 'https://cors-anywhere.herokuapp.com/';
-
 //https://stackoverflow.com/questions/43871637/no-access-control-allow-origin-header-is-present-on-the-requested-resource-whe
-
 export async function awsQueryLanguage(queryPackage) {
     const url =   BACKENDURL + `sources?language=${queryPackage.language}&category=${queryPackage.category}`
     const token = tokenGenerator();
@@ -35,7 +33,7 @@ export async function awsQuerySpecificHeadlines(id) {
 
 
 function tokenGenerator() {
-    let number =  (Math.random() * (100 - 10 +1)).toString().split('.');
+    let number =  (Math.random() * (100 - 10)+10).toString().split('.');
     let letters = letterGen();
     let specialSigns = specialSignsGen();
     return letters + number[0] + specialSigns
@@ -52,7 +50,7 @@ function letterGen() {
 
 function specialSignsGen() {
     let result = '';
-    const characters = '!§$%&/()=?#-_.;,';
+    const characters = '!§$%&/()=?#-.;,';
     for (let i = 0; i < 2; i++) {
         result += characters.charAt(Math.floor(Math.random() * characters.length));
     }

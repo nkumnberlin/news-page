@@ -1,6 +1,6 @@
 import {awsQueryLanguage, awsQuerySpecificHeadlines} from '../src/api/AwsBackendAPI.jsx';
 import _ from 'lodash'
-import {changeResortButton, renderMain, noContentAvailable, selectChoices, createSourceButtons, createOverlayContent} from '../src/renderHTML/RenderHTMLContent.js';
+import {changeResortButton,reloadPageSnackbar, reloadPageOnError, showSpinner, renderMain, noContentAvailable, selectChoices, createSourceButtons, createOverlayContent} from '../src/renderHTML/RenderHTMLContent.js';
 
 const main = document.querySelector('main');
 const defaultSource = "der-tagesspiegel";
@@ -13,7 +13,7 @@ const overlayContent = {languageOverlay:"In welcher Sprache möchtest du deine N
 
 let initialSourcesLanguageJSON = "";
 let initalHeadlinesJSON = "";
-let currentLanguageChoice = "", currentCategoryChoice = "", activeSource = "";
+let currentLanguageChoice = "de", currentCategoryChoice = "", activeSource = "";
 
 window.addEventListener('load', ev => {
     init();
@@ -29,10 +29,20 @@ window.addEventListener('load', ev => {
 
 function init() {
     overlayLanguage();
-    createEventListener();
 };
 
-function createEventListener() {
+function showSpinnerIndex(hide) {
+    let overlay = document.getElementById('overlay');
+    overlay.style.display = 'block';
+    overlay.innerHTML = showSpinner();
+}
+
+function hideSpinnerIndex(hide) {
+    setTimeout(function (){
+        let overlay = document.getElementById('overlay');
+        overlay.style.display = 'none';
+        overlay.innerHTML = showSpinner();
+        }, 2000)
 
 }
 
@@ -63,8 +73,18 @@ function overlayCategory(overlay) {
 }
 
 async function updateNotifier() {
-    let snackbar = document.getElementById('snackbar')
-    let updatedHeadlinesJSON = await awsQuerySpecificHeadlines(activeSource, initalHeadlinesJSON);
+    showSpinnerIndex();
+    let updatedHeadlinesJSON = await awsQuerySpecificHeadlines(activeSource, initalHeadlinesJSON)
+        .then(hideSpinnerIndex())
+        .catch(reason => {
+            document.getElementById('snackbar').innerHTML = reloadPageOnError(reason)
+        });
+    eventListenerToReloadPage(updatedHeadlinesJSON);
+}
+
+function eventListenerToReloadPage(updatedHeadlinesJSON){
+    let snackbar = document.getElementById('snackbar');
+    snackbar.innerHTML = reloadPageSnackbar();
     document.getElementById('reloadPage').addEventListener('click', ev => {
         ev.preventDefault();
         renderMain(updatedHeadlinesJSON, initalHeadlinesJSON)
@@ -73,27 +93,22 @@ async function updateNotifier() {
         console.log('News wurden aktualisiert');
         snackbar.classList.remove('show')
     })
-    if (_.isEqual(initalHeadlinesJSON, updatedHeadlinesJSON)) {
-        console.log("snackbar hide");
-    } else {
-        console.log("snackbar show!")
+    _.isEqual(initalHeadlinesJSON, updatedHeadlinesJSON) ?
+        console.log("snackbar hide"):
         snackbar.className = 'show';
-    }
-
 };
 
 //https://blog.aylien.com/getting-started-news-api-part-3-advanced-search/
 
 async function updateSources() {
     const queryPackage = {"language": currentLanguageChoice, "category": currentCategoryChoice};
-    initialSourcesLanguageJSON = await awsQueryLanguage(queryPackage);
-    sourceSelector.innerHTML = initialSourcesLanguageJSON.sources.map(
-        src => createSourceButtons(src)).join('\n')
-
-    if (initialSourcesLanguageJSON.sources.length === 0){
-        main.innerHTML = noContentAvailable();
-    }
-    sourceSelector.innerHTML += changeResortButton();
+    showSpinnerIndex();
+    initialSourcesLanguageJSON = await awsQueryLanguage(queryPackage)
+        .then(hideSpinnerIndex())
+        .catch(reason => {
+            document.getElementById('snackbar').innerHTML = reloadPageOnError(reason)
+        }
+    );
     sourceSelector.addEventListener('click', evt => {
             if (evt.target.id !== 'resortChange') {
                 activeSource = evt.target.id;
@@ -106,6 +121,16 @@ async function updateSources() {
             }
         }
     );
+    addSourcesToButton();
+}
+
+function addSourcesToButton() {
+    sourceSelector.innerHTML = initialSourcesLanguageJSON.sources.map(
+        src => createSourceButtons(src)).join('\n')
+    sourceSelector.innerHTML += changeResortButton();
+    if (initialSourcesLanguageJSON.sources.length === 0){
+        main.innerHTML = noContentAvailable();
+    }
 }
 
 function changeActiveElement(evt){
@@ -121,12 +146,16 @@ async function showSpecificHeadlines(source = defaultSource) {
     if (typeof source.target !== "undefined") {
         id = source.target.id
     }
-    initalHeadlinesJSON = await awsQuerySpecificHeadlines(activeSource);
+    showSpinnerIndex();
+    initalHeadlinesJSON = await awsQuerySpecificHeadlines(activeSource)
+        .then(hideSpinnerIndex())
+        .catch(reason => {
+        document.getElementById('snackbar').innerHTML = reloadPageOnError(reason)
+    });
     renderMain(initalHeadlinesJSON, initalHeadlinesJSON)
     reAdjustNews();
-    console.log("timeout")
 
-   let interval =  setInterval(updateNotifier, 300000, initalHeadlinesJSON);
+    setInterval(updateNotifier, 150000, initalHeadlinesJSON);
 }
 
 function reAdjustNews(){
