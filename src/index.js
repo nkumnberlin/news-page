@@ -89,6 +89,7 @@ async function updateSources() {
     initialSourcesLanguageJSON = await awsQueryLanguage(queryPackage);
     sourceSelector.innerHTML = initialSourcesLanguageJSON.sources.map(
         src => createSourceButtons(src)).join('\n')
+
     if (initialSourcesLanguageJSON.sources.length === 0){
         main.innerHTML = noContentAvailable();
     }

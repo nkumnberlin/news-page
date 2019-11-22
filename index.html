@@ -10,11 +10,12 @@
 <link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 <body>
+<div class="container-fluid">
+
 <div class="jumbotron text-center">
     <h1 class="display-1 font-weight-light header">The News Page</h1>
 </div>
 
-<div class="container-fluid">
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="sourceSelector" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Quellen:
@@ -25,8 +26,10 @@
         <div id="overlay">
         </div>
     <p class="h1 font-weight-light text-center" id="newsOf"></p>
+    <div class="container-fluid">
     <div class="row">
             <main></main>
+    </div>
     </div>
             <div id="snackbar">
                 <p> Neuer Inhalt vorhanden </p>
@@ -34,10 +37,11 @@
                 <button class="btn btn-primary" type="button" id="reloadPage">Reload Page</button>
             </div>
     </div>
-</div>
 
 
 <script src="app.js"></script>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
