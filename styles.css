@@ -4,6 +4,11 @@
 }
 .jumbotron{
     background-image: url("images/gettyimages-139734110-2048x2048.jpg");
+    height: 300px;
+}
+
+.header{
+    color: white;
 }
 
 #overlay {

@@ -7,7 +7,7 @@ export function createArticlesLeft(article) {
                 <p class="lead">${article.description}<p>
             </div>
             <div class="col-md-5">
-                <img class="featurette-image img-fluid mx-auto"  src="${article.urlToImage}">
+                <img class="featurette-image img-fluid mx-auto" href="${article.url}" src="${article.urlToImage}">
             </div>
         </div>`
 }
@@ -16,6 +16,7 @@ export function createArticlesRight(article, i) {
     return `<hr class="featurette-divider">
                 <div class="row featurette">
                  <div class="col-md-7 order-md-2">
+                         <a href="${article.url}">
                    <h2 class="featurette-heading">${article.title}</h2>
                 <p class="lead">${article.description}<p>
                 </div>
