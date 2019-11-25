@@ -160,11 +160,14 @@ function reloadPage() {
 }
 
 function addSourcesToButton() {
-    initialSourcesLanguageJSON.sources.length === 0 ?
-        main.innerHTML = noContentAvailable() :
+    if (initialSourcesLanguageJSON.sources.length === 0) {
+        main.innerHTML = noContentAvailable()
+        sourceSelector.innerHTML = changeResortButton();
+    } else {
         sourceSelector.innerHTML = initialSourcesLanguageJSON.sources.map(
             src => createSourceButtons(src)).join('\n');
-    sourceSelector.innerHTML += changeResortButton();
+        sourceSelector.innerHTML += changeResortButton();
+    }
 }
 
 function changeActiveElement(evt) {
