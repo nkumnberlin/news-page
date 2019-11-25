@@ -1,8 +1,8 @@
 import {awsQueryLanguage, awsQuerySpecificHeadlines} from '../src/api/AwsBackendAPI.jsx';
 import _ from 'lodash'
-import {changeResortButton,reloadPageSnackbar, reloadPageOnError, showSpinner, renderMain, noContentAvailable, selectChoices, createSourceButtons, createOverlayContent} from '../src/renderHTML/RenderHTMLContent.js';
+import {changeResortButton,reloadPageSnackbar, showInfoSnackbar, reloadPageOnError, showSpinner, renderMain, noContentAvailable, selectChoices, createSourceButtons, createOverlayContent} from '../src/renderHTML/RenderHTMLContent.js';
 
-const main = document.querySelector('main');
+let main = document.querySelector('main');
 const defaultSource = "der-tagesspiegel";
 const sourceSelector = document.querySelector('.dropdown-menu');
 const languages = {lang: [{id: "de", name: "Deutsch"}, {id: "en", name: "Englisch"}]};
@@ -37,13 +37,13 @@ function showSpinnerIndex(hide) {
     overlay.innerHTML = showSpinner();
 }
 
-function hideSpinnerIndex(hide) {
-    setTimeout(function (){
+function hideSpinnerIndex(message) {
+    setTimeout(function () {
         let overlay = document.getElementById('overlay');
         overlay.style.display = 'none';
         overlay.innerHTML = showSpinner();
-        }, 2000)
-
+        contentLoaded(message);
+    }, 3000)
 }
 
 function overlayLanguage() {
@@ -51,8 +51,8 @@ function overlayLanguage() {
     overlay.style.display = 'block';
     overlay.innerHTML = createOverlayContent(overlayContent.languageOverlay);
     let overlayOptions = document.getElementById('overlay-options');
-    overlayOptions.innerHTML = languages.lang.map( lang => selectChoices(lang)).join('\n');
-    document.getElementById('button-accept').addEventListener( 'click', ev => {
+    overlayOptions.innerHTML = languages.lang.map(lang => selectChoices(lang)).join('\n');
+    document.getElementById('button-accept').addEventListener('click', ev => {
         currentLanguageChoice = overlayOptions.options[overlayOptions.selectedIndex].value;
         overlayCategory(overlay)
     })
@@ -64,7 +64,7 @@ function overlayCategory(overlay) {
     document.querySelector('main').innerHTML = "";
     overlay.innerHTML = createOverlayContent(overlayContent.categoryOverlay);
     let overlayOptions = document.getElementById('overlay-options');
-    overlayOptions.innerHTML = categories.cat.map( categories => selectChoices(categories)).join('\n')
+    overlayOptions.innerHTML = categories.cat.map(categories => selectChoices(categories)).join('\n')
     document.getElementById('button-accept').addEventListener('click', ev => {
         currentCategoryChoice = overlayOptions.options[overlayOptions.selectedIndex].value;
         overlay.style.display = 'none';
@@ -73,16 +73,25 @@ function overlayCategory(overlay) {
 }
 
 async function updateNotifier() {
+    let snackbar = document.getElementById('snackbar');
     showSpinnerIndex();
     let updatedHeadlinesJSON = await awsQuerySpecificHeadlines(activeSource, initalHeadlinesJSON)
-        .then(hideSpinnerIndex())
+        .then(hideSpinnerIndex("Viel Spaß mit den aktuellen Nachrichten"))
         .catch(reason => {
-            document.getElementById('snackbar').innerHTML = reloadPageOnError(reason)
+            showSnackbarOnError(reason);
         });
     eventListenerToReloadPage(updatedHeadlinesJSON);
+
 }
 
-function eventListenerToReloadPage(updatedHeadlinesJSON){
+function showSnackbarOnError(reason) {
+    let snackbar =  document.getElementById('snackbar')
+    snackbar.innerHTML = reloadPageOnError(reason);
+    snackbar.className = 'show'
+    reloadPage();
+}
+
+function eventListenerToReloadPage(updatedHeadlinesJSON) {
     let snackbar = document.getElementById('snackbar');
     snackbar.innerHTML = reloadPageSnackbar();
     document.getElementById('reloadPage').addEventListener('click', ev => {
@@ -94,7 +103,7 @@ function eventListenerToReloadPage(updatedHeadlinesJSON){
         snackbar.classList.remove('show')
     })
     _.isEqual(initalHeadlinesJSON, updatedHeadlinesJSON) ?
-        console.log("snackbar hide"):
+        console.log("snackbar hide") :
         snackbar.className = 'show';
 };
 
@@ -104,11 +113,13 @@ async function updateSources() {
     const queryPackage = {"language": currentLanguageChoice, "category": currentCategoryChoice};
     showSpinnerIndex();
     initialSourcesLanguageJSON = await awsQueryLanguage(queryPackage)
-        .then(hideSpinnerIndex())
+        .then(
+            hideSpinnerIndex("Sie können nun ein Nachrichtenportal wählen")
+        )
         .catch(reason => {
-            document.getElementById('snackbar').innerHTML = reloadPageOnError(reason)
-        }
-    );
+                showSnackbarOnError(reason)
+            }
+        );
     sourceSelector.addEventListener('click', evt => {
             if (evt.target.id !== 'resortChange') {
                 activeSource = evt.target.id;
@@ -124,18 +135,32 @@ async function updateSources() {
     addSourcesToButton();
 }
 
-function addSourcesToButton() {
-    sourceSelector.innerHTML = initialSourcesLanguageJSON.sources.map(
-        src => createSourceButtons(src)).join('\n')
-    sourceSelector.innerHTML += changeResortButton();
-    if (initialSourcesLanguageJSON.sources.length === 0){
-        main.innerHTML = noContentAvailable();
-    }
+function contentLoaded(message) {
+    let snackbar = document.getElementById('snackbar');
+    snackbar.innerHTML = showInfoSnackbar(message);
+    snackbar.className = 'show';
+    setTimeout(function () {
+        snackbar.classList.remove('show')
+    }, 3000)
 }
 
-function changeActiveElement(evt){
+function reloadPage() {
+    document.getElementById('reloadPage').addEventListener('click', function () {
+        window.location.reload()
+    });
+}
+
+function addSourcesToButton() {
+    initialSourcesLanguageJSON.sources.length === 0 ?
+        main.innerHTML = noContentAvailable() :
+        sourceSelector.innerHTML = initialSourcesLanguageJSON.sources.map(
+            src => createSourceButtons(src)).join('\n');
+    sourceSelector.innerHTML += changeResortButton();
+}
+
+function changeActiveElement(evt) {
     let elems = document.querySelectorAll(".active");
-    [].forEach.call(elems, function(el) {
+    [].forEach.call(elems, function (el) {
         el.classList.remove("active");
     });
     evt.target.className += ' active'
@@ -148,21 +173,21 @@ async function showSpecificHeadlines(source = defaultSource) {
     }
     showSpinnerIndex();
     initalHeadlinesJSON = await awsQuerySpecificHeadlines(activeSource)
-        .then(hideSpinnerIndex())
+        .then(hideSpinnerIndex("Viel Spaß mit den aktuellen Nachrichten"))
         .catch(reason => {
-        document.getElementById('snackbar').innerHTML = reloadPageOnError(reason)
-    });
+            showSnackbarOnError(reason)
+        });
     renderMain(initalHeadlinesJSON, initalHeadlinesJSON)
     reAdjustNews();
 
     setInterval(updateNotifier, 150000, initalHeadlinesJSON);
 }
 
-function reAdjustNews(){
+function reAdjustNews() {
     let textClass = document.querySelectorAll('.col-md-7');
     let imageClass = document.querySelectorAll('.col-md-5');
-    for(let  i in textClass ){
-        if(i % 2 == 0 ){
+    for (let i in textClass) {
+        if (i % 2 == 0) {
             textClass[i].className += " order-md-2";
             imageClass[i].className += " order-md-1";
         }

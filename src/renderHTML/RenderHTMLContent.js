@@ -51,10 +51,14 @@ export function reloadPageSnackbar() {
 }
 
 export function reloadPageOnError(reason) {
-    debugger
     return `<p> An error occured: ${reason}</p>
                 <br/>
+                <p> Please reload the Page </p>
             <button class="btn btn-primary" type="button" id="reloadPage">Reload Page</button>`
+}
+
+export function showInfoSnackbar(message) {
+    return `<p> Content wurde geladen. ${message} </p>`
 }
 
 export function createSourceButtons(src){
@@ -66,7 +70,7 @@ export function changeResortButton() {
 }
 
 export function noContentAvailable() {
-    document.getElementById('newsOf').innerHTML = ""
+    document.getElementById('newsOf').innerHTML = "";
     return `<div class="alert alert-primary" role="alert">
         Aktuell sind keine Quellen für dieses Resort vorhanden. Bitte wähle ein anderes.
     </div>`
