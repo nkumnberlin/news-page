@@ -1,16 +1,25 @@
-import {awsQueryLanguage, awsQuerySpecificHeadlines} from '../src/api/AwsBackendAPI.jsx';
 import _ from 'lodash'
-import {changeResortButton,reloadPageSnackbar, showInfoSnackbar, reloadPageOnError, showSpinner, renderMain, noContentAvailable, selectChoices, createSourceButtons, createOverlayContent} from '../src/renderHTML/RenderHTMLContent.js';
+import {awsQueryLanguage, awsQuerySpecificHeadlines} from '../src/api/AwsBackendAPI.jsx';
+import {
+    changeResortButton,
+    reloadPageSnackbar,
+    showInfoSnackbar,
+    reloadPageOnError,
+    showSpinner,
+    renderMain,
+    noContentAvailable,
+    selectChoices,
+    createSourceButtons,
+    createOverlayContent
+} from '../src/renderHTML/RenderHTMLContent.js';
+import {languagesText, categoriesText, overLayContentText, snackbarTextText} from '../src/textFiles/dictonary.js'
 
-let main = document.querySelector('main');
 const defaultSource = "der-tagesspiegel";
 const sourceSelector = document.querySelector('.dropdown-menu');
-const languages = {lang: [{id: "de", name: "Deutsch"}, {id: "en", name: "Englisch"}]};
-const categories = {cat: [{id: "business", name: "Wirtschaft" }, {id: "entertainment", name: "Unterhaltung"}, {id:"general", name: "Allgemein"},
-        {id: "health", name: "Gesundheit"}, {id: "science", name: "Wissenschaft"}, {id: "sports", name: "Sport"},
-        {id:"technology", name:"Technologie"}, {id: undefined, name: "Keine Präferenz"}]};
-const overlayContent = {languageOverlay:"In welcher Sprache möchtest du deine News?", categoryOverlay: "Welche Themenbereiche interessieren dich?"};
+const languages = languagesText(), categories = categoriesText(), overlayContent = overLayContentText(),
+    snackbarText = snackbarTextText();
 
+let main = document.querySelector('main');
 let initialSourcesLanguageJSON = "";
 let initalHeadlinesJSON = "";
 let currentLanguageChoice = "de", currentCategoryChoice = "", activeSource = "";
@@ -76,7 +85,7 @@ async function updateNotifier() {
     let snackbar = document.getElementById('snackbar');
     showSpinnerIndex();
     let updatedHeadlinesJSON = await awsQuerySpecificHeadlines(activeSource, initalHeadlinesJSON)
-        .then(hideSpinnerIndex("Viel Spaß mit den aktuellen Nachrichten"))
+        .then(hideSpinnerIndex(snackbarText.updateNotifier))
         .catch(reason => {
             showSnackbarOnError(reason);
         });
@@ -85,7 +94,7 @@ async function updateNotifier() {
 }
 
 function showSnackbarOnError(reason) {
-    let snackbar =  document.getElementById('snackbar')
+    let snackbar = document.getElementById('snackbar')
     snackbar.innerHTML = reloadPageOnError(reason);
     snackbar.className = 'show'
     reloadPage();
@@ -114,7 +123,7 @@ async function updateSources() {
     showSpinnerIndex();
     initialSourcesLanguageJSON = await awsQueryLanguage(queryPackage)
         .then(
-            hideSpinnerIndex("Sie können nun ein Nachrichtenportal wählen")
+            hideSpinnerIndex(snackbarText.updateSources)
         )
         .catch(reason => {
                 showSnackbarOnError(reason)
@@ -173,7 +182,7 @@ async function showSpecificHeadlines(source = defaultSource) {
     }
     showSpinnerIndex();
     initalHeadlinesJSON = await awsQuerySpecificHeadlines(activeSource)
-        .then(hideSpinnerIndex("Viel Spaß mit den aktuellen Nachrichten"))
+        .then(hideSpinnerIndex(snackbarText.showHeadlines))
         .catch(reason => {
             showSnackbarOnError(reason)
         });
